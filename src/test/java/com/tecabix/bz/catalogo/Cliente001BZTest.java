@@ -1,7 +1,10 @@
 package com.tecabix.bz.catalogo;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoInteractions;
+import static org.mockito.Mockito.when;
 
 import java.util.Optional;
 
@@ -32,41 +35,84 @@ import com.tecabix.sv.rq.RQSV013;
 @ExtendWith(MockitoExtension.class)
 class Cliente001BZTest {
 
+    /**
+     * Constante que representa el ID de una persona.
+     */
     private static final Long PERSONA_ID = 1L;
-    
+
+    /**
+     * Constante que representa el ID de persona 2.
+     */
+    private static final Long PF_ID_DOS = 2L;
+
+    /**
+     * Constante que representa el ID de persona 3.
+     */
+    private static final Long PF_ID_TRES = 3L;
+
+    /**
+     * Repositorio simulado para operaciones con personas físicas.
+     */
     @Mock
     private PersonaFisicaRepository personaFisicaRepository;
 
+    /**
+     * Repositorio simulado para operaciones con clientes.
+     */
     @Mock
     private ClienteRepository clienteRepository;
 
+    /**
+     * Objeto simulado de transferencia de datos para Cliente001Bz.
+     */
     @Mock
     private Cliente001BzDTO dto;
 
+    /**
+     * Objeto simulado para la clase RQSV013.
+     */
     @Mock
     private RQSV013 rqsv013;
 
+    /**
+     * Objeto simulado que representa una sesión de usuario.
+     */
     @Mock
     private Sesion sesion;
 
+    /**
+     * Objeto simulado que representa un usuario.
+     */
     @Mock
     private Usuario usuario;
 
+    /**
+     * Objeto simulado que representa la relación entre usuario y persona.
+     */
     @Mock
     private UsuarioPersona usuarioPersona;
 
+    /**
+     * Objeto simulado que representa una persona.
+     */
     @Mock
     private Persona persona;
 
+    /**
+     * Objeto simulado para la clase RSB008.
+     */
     @Mock
     private RSB008 rsb008;
 
+    /**
+     * Instancia del servicio Cliente001BZ que se va a probar.
+     */
     private Cliente001BZ service;
-    
 
     @BeforeEach
     void setUp() {
-        when(dto.getPersonaFisicaRepository()).thenReturn(personaFisicaRepository);
+        when(dto.getPersonaFisicaRepository())
+            .thenReturn(personaFisicaRepository);
         when(dto.getClienteRepository()).thenReturn(clienteRepository);
         service = new Cliente001BZ(dto);
 
@@ -79,8 +125,10 @@ class Cliente001BZTest {
     }
 
     @Test
-    void cuandoPersonaFisicaNoExiste_retornaNotFound() {
-        when(personaFisicaRepository.findByPersona(PERSONA_ID)).thenReturn(Optional.empty());
+    void cuandoPersonaFisicaNoExisteRetornaNotFound() {
+
+        when(personaFisicaRepository.findByPersona(PERSONA_ID))
+            .thenReturn(Optional.empty());
 
         ResponseEntity<RSB008> expected = ResponseEntity.notFound().build();
         when(rsb008.notFound("No se encontro la persona.")).thenReturn(expected);
@@ -94,14 +142,16 @@ class Cliente001BZTest {
     }
 
     @Test
-    void cuandoClienteNoExiste_retornaNotFound() {
+    void cuandoClienteNoExisteRetornaNotFound() {
         PersonaFisica pf = mock(PersonaFisica.class);
-        when(personaFisicaRepository.findByPersona(PERSONA_ID)).thenReturn(Optional.of(pf));
+        when(personaFisicaRepository.findByPersona(PERSONA_ID))
+            .thenReturn(Optional.of(pf));
 
-        Long PF_ID = 2L;
-        when(pf.getId()).thenReturn(PF_ID);
+        when(pf.getId()).thenReturn(PF_ID_DOS);
 
-        when(clienteRepository.findByPersonaFisica(PF_ID)).thenReturn(Optional.empty());
+        when(clienteRepository.findByPersonaFisica(PF_ID_DOS))
+            .thenReturn(Optional.empty());
+
         ResponseEntity<RSB008> expected = ResponseEntity.notFound().build();
         when(rsb008.notFound("No se encontro el cliente.")).thenReturn(expected);
 
@@ -109,20 +159,21 @@ class Cliente001BZTest {
 
         assertEquals(expected, response);
         verify(personaFisicaRepository).findByPersona(PERSONA_ID);
-        verify(clienteRepository).findByPersonaFisica(PF_ID);
+        verify(clienteRepository).findByPersonaFisica(PF_ID_DOS);
         verify(rsb008).notFound("No se encontro el cliente.");
     }
 
     @Test
-    void cuandoClienteExiste_retornaOk() {
+    void cuandoClienteExisteRetornaOk() {
         PersonaFisica pf = mock(PersonaFisica.class);
-        when(personaFisicaRepository.findByPersona(PERSONA_ID)).thenReturn(Optional.of(pf));
+        when(personaFisicaRepository.findByPersona(PERSONA_ID))
+            .thenReturn(Optional.of(pf));
 
-        Long PF_ID = 3L;
-        when(pf.getId()).thenReturn(PF_ID);
+        when(pf.getId()).thenReturn(PF_ID_TRES);
 
         Cliente cliente = mock(Cliente.class);
-        when(clienteRepository.findByPersonaFisica(PF_ID)).thenReturn(Optional.of(cliente));
+        when(clienteRepository.findByPersonaFisica(PF_ID_TRES))
+            .thenReturn(Optional.of(cliente));
 
         ResponseEntity<RSB008> expected = ResponseEntity.ok().build();
         when(rsb008.ok(cliente)).thenReturn(expected);
@@ -131,7 +182,7 @@ class Cliente001BZTest {
 
         assertEquals(expected, response);
         verify(personaFisicaRepository).findByPersona(PERSONA_ID);
-        verify(clienteRepository).findByPersonaFisica(PF_ID);
+        verify(clienteRepository).findByPersonaFisica(PF_ID_TRES);
         verify(rsb008).ok(cliente);
     }
 }
