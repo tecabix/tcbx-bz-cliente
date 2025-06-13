@@ -19,22 +19,74 @@ import com.tecabix.sv.rq.RQSV013;
  * @author Ramirez Urrutia Angel Abinadi
  */
 public class Cliente001BZ {
-	
-	private PersonaFisicaRepository personaFisicaRepository;
-	
-	private ClienteRepository clienteRepository;
-	
-	private String NO_SE_ENCONTRO_LA_PERSONA = "No se encontro la persona.";
-	
-	private String NO_SE_ENCONTRO_EL_CLIENTE = "No se encontro el cliente.";
-	
 
-    public Cliente001BZ(Cliente001BzDTO dto) {
-		this.personaFisicaRepository = dto.getPersonaFisicaRepository();
-		this.clienteRepository = dto.getClienteRepository();
-	}
+    /**
+     * Repositorio para realizar operaciones CRUD sobre la entidad
+     * {@link PersonaFisica}.
+     */
+    private final PersonaFisicaRepository personaFisicaRepository;
 
-	public ResponseEntity<RSB008> obtener(final RQSV013 rqsv013) {
+    /**
+     * Repositorio para realizar operaciones CRUD sobre la entidad
+     * {@link Cliente}.
+     */
+    private final ClienteRepository clienteRepository;
+
+    /**
+     * Persona no encontrada.
+     */
+    private static final String NO_SE_ENCONTRO_LA_PERSONA;
+
+    static {
+        NO_SE_ENCONTRO_LA_PERSONA = "No se encontro la persona.";
+        NO_SE_ENCONTRO_EL_CLIENTE = "No se encontro el cliente.";
+    }
+
+    /**
+     * Cliente no encontrado.
+     */
+    private static final String NO_SE_ENCONTRO_EL_CLIENTE;
+
+
+    /**
+     * Constructor de la clase {@code Cliente001BZ}.
+     * <p>
+     * Inicializa las dependencias necesarias a partir de un objeto
+     * {@link Cliente001BzDTO}.
+     * Este constructor extrae los repositorios de persona física y cliente
+     * desde el DTO para ser utilizados en la lógica de negocio de esta clase.
+     *
+     * @param dto Objeto de transferencia de datos que contiene las dependencias
+     *            necesarias como {@code personaFisicaRepository}
+     *            y {@code clienteRepository}.
+     */
+    public Cliente001BZ(final Cliente001BzDTO dto) {
+        this.personaFisicaRepository = dto.getPersonaFisicaRepository();
+        this.clienteRepository = dto.getClienteRepository();
+    }
+
+    /**
+     * Obtiene la información del cliente asociada a la sesión del usuario.
+     * <p>
+     * El proceso consiste en:
+     * <ol>
+     * <li>Recuperar la {@link Persona} vinculada al usuario de la sesión.</li>
+     * <li>Buscar la entidad {@link PersonaFisica} relacionada a dicha
+     * persona.</li>
+     * <li>Obtener el {@link Cliente} asociado a la {@link PersonaFisica}
+     * encontrada.</li>
+     * </ol>
+     * En caso de no encontrar la persona o el cliente, se retorna un error con
+     * el mensaje correspondiente.
+     * </p>
+     *
+     * @param rqsv013 objeto de solicitud que contiene la sesión del usuario y
+     *                el objeto de respuesta {@link RSB008}.
+     * @return un {@link ResponseEntity} con el objeto {@link RSB008} que
+     *         envuelve la información del cliente, o un error en caso de que
+     *         la búsqueda no sea exitosa.
+     */
+    public ResponseEntity<RSB008> obtener(final RQSV013 rqsv013) {
 
         Sesion sesion = rqsv013.getSesion();
         RSB008 rsb008 = rqsv013.getRsb008();

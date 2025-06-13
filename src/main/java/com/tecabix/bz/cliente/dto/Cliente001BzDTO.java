@@ -4,28 +4,59 @@ import com.tecabix.db.repository.ClienteRepository;
 import com.tecabix.db.repository.PersonaFisicaRepository;
 
 /**
-*
-* @author Ramirez Urrutia Angel Abinadi
-*/
+ *
+ * @author Ramirez Urrutia Angel Abinadi
+ */
 public class Cliente001BzDTO {
 
-	private PersonaFisicaRepository personaFisicaRepository;
-	
-	private ClienteRepository clienteRepository;
+    /**
+     * Repositorio para realizar operaciones CRUD sobre la entidad
+     * {@link PersonaFisica}.
+     */
+    private PersonaFisicaRepository personaFisicaRepository;
 
-	public PersonaFisicaRepository getPersonaFisicaRepository() {
-		return personaFisicaRepository;
-	}
+    /**
+     * Repositorio para realizar operaciones CRUD sobre la entidad
+     * {@link Cliente}.
+     */
+    private ClienteRepository clienteRepository;
 
-	public void setPersonaFisicaRepository(PersonaFisicaRepository personaFisicaRepository) {
-		this.personaFisicaRepository = personaFisicaRepository;
-	}
+    /**
+     * Obtiene el repositorio de persona física.
+     *
+     * @return el repositorio de persona física.
+     */
+    public PersonaFisicaRepository getPersonaFisicaRepository() {
+        return personaFisicaRepository;
+    }
 
-	public ClienteRepository getClienteRepository() {
-		return clienteRepository;
-	}
+    /**
+     * Establece el repositorio de persona física.
+     *
+     * @param repository repositorio de persona física a
+     *                                establecer.
+     */
+    public void setPersonaFisicaRepository(
+        final PersonaFisicaRepository repository) {
+        this.personaFisicaRepository = repository;
+    }
 
-	public void setClienteRepository(ClienteRepository clienteRepository) {
-		this.clienteRepository = clienteRepository;
-	}
+    /**
+     * Obtiene el repositorio de cliente.
+     *
+     * @return el repositorio de cliente.
+     */
+    public ClienteRepository getClienteRepository() {
+        return clienteRepository;
+    }
+
+    /**
+     * Establece el repositorio de cliente.
+     *
+     * @param repository el repositorio de cliente a establecer.
+     */
+    public void setClienteRepository(final ClienteRepository repository) {
+        this.clienteRepository = repository;
+    }
+
 }
