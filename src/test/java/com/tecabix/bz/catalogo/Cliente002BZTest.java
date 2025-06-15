@@ -595,6 +595,8 @@ public class Cliente002BZTest {
         when(rsb028.ok(cliente)).thenReturn(ResponseEntity.ok(rsb028));
 
         ResponseEntity<RSB028> response = cliente002bz.crear(rqsv014);
+        
+        assertEquals(HttpStatus.OK, response.getStatusCode());
     }
 
     @Test
