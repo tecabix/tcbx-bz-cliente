@@ -41,83 +41,217 @@ import com.tecabix.sv.rq.RQSV014;
 import com.tecabix.sv.rq.RQSV024;
 
 /**
-*
-* @author Ramirez Urrutia Angel Abinadi
-*/
+ *
+ * @author Ramirez Urrutia Angel Abinadi
+ */
 public abstract class Cliente002BZ {
 
-	private UsuarioRepository usuarioRepository;
-	
-	private PersonaFisicaRepository personaFisicaRepository;
-	
-	private CatalogoRepository catalogoRepository;
-	
-	private List<Catalogo> tipoContacto;
-	
-	private Catalogo activo;
-	
-	private Catalogo pendiente;
-	
-	private Catalogo riesgoC7;
-	
-	private Catalogo tipoFisica;
-	
-	private Perfil perfilCliente;
-	
-	private PersonaRepository personaRepository;
-	
-	private ContactoRepository contactoRepository;
-	
-	private UsuarioPersonaRepository usuarioPersonaRepository;
-	
-	private MunicipioRepository municipioRepository;
-	
-	private DireccionRepository direccionRepository;
-	
-	private CuentaRepository cuentaRepository;
-	
-	private ClienteRepository clienteRepository;
-	
-	private InversionAutomaticaRepository inversionAutomaticaRepository;
-	 
-	private CreditoRepository creditoRepository;
-	
-	private String USERNAME_YA_EXISTE = "El username ya existe.";
-	private String CURP_YA_EXISTE = "El CURP ya existe.";
-	private String SIN_COINCIDENCIAS_CON_EL_TIPO_DE_CONTACTO = "Sin coincidencias con el tipo de contacto.";
-	private String CORREO = "(?!\\s)([A-Za-zñÑáéíóúÁÉÍÓÚüÜ0-9]+([.-][A-Za-zñÑáéíóúÁÉÍÓÚüÜ0-9_]+)*@[A-Za-zñÑáéíóúÁÉÍÓÚüÜ0-9]+([.][A-Za-zñÑáéíóúÁÉÍÓÚüÜ0-9_]+)*[.][A-Za-zñÑáéíóúÁÉÍÓÚüÜ]{2,3})";
-	private String URL = "(?=.{15,45}$)https?:\\/\\/[A-Za-zñÑáéíóúÁÉÍÓÚüÜ0-9]+[...]";
-	private String TELEFONO = "\\d{10}";
-	
-	private int LIMITE_CREDITICIO = 350_00;
-	
-	public Cliente002BZ(Cliente002BzDTO dto) {
-		this.usuarioRepository = dto.getUsuarioRepository();
-		this.personaFisicaRepository = dto.getPersonaFisicaRepository();
-		this.catalogoRepository = dto.getCatalogoRepository();
-		this.tipoContacto = dto.getTipoContacto();
-		this.activo = dto.getActivo();
-		this.pendiente = dto.getPendiente();
-		this.riesgoC7 = dto.getRiesgoC7();
-		this.tipoFisica = dto.getTipoFisica();
-		this.perfilCliente = dto.getPerfilCliente();
-		this.personaRepository = dto.getPersonaRepository();
-		this.contactoRepository = dto.getContactoRepository();
-		this.usuarioPersonaRepository = dto.getUsuarioPersonaRepository();
-		this.municipioRepository = dto.getMunicipioRepository();
-		this.direccionRepository = dto.getDireccionRepository();
-		this.cuentaRepository = dto.getCuentaRepository();
-		this.clienteRepository = dto.getClienteRepository();
-		this.inversionAutomaticaRepository = dto.getInversionAutomaticaRepository();
-		this.creditoRepository = dto.getCreditoRepository();
-	}
+    /**
+     * Repositorio para realizar operaciones CRUD sobre la entidad {@link Usuario}.
+     */
+    private final UsuarioRepository usuarioRepository;
 
-	public ResponseEntity<RSB028> crear(final RQSV014 rqsv014) {
+    /**
+     * Repositorio para realizar operaciones CRUD sobre la entidad
+     * {@link PersonaFisica}.
+     */
+    private final PersonaFisicaRepository personaFisicaRepository;
+
+    /**
+     * Repositorio para realizar operaciones CRUD sobre la entidad {@link Catalogo}.
+     */
+    private final CatalogoRepository catalogoRepository;
+
+    /**
+     * Lista de catálogos que define los tipos de contacto disponibles. Cada
+     * elemento representa un tipo de contacto permitido en el sistema.
+     */
+    private final List<Catalogo> tipoContacto;
+
+    /**
+     * Catálogo que representa el estado "Activo" en el sistema.
+     */
+    private final Catalogo activo;
+
+    /**
+     * Catálogo que representa el estado "Pendiente" en el sistema.
+     */
+    private final Catalogo pendiente;
+
+    /**
+     * Catálogo que define el nivel de riesgo de crédito (C7) asignado a nuevos
+     * clientes.
+     */
+    private final Catalogo riesgoC7;
+
+    /**
+     * Catálogo que representa el tipo de persona física utilizado para crear una
+     * entidad {@link Persona}.
+     */
+    private final Catalogo tipoFisica;
+
+    /**
+     * Perfil asignado a los clientes en el sistema.
+     */
+    private final Perfil perfilCliente;
+
+    /**
+     * Repositorio para realizar operaciones CRUD sobre la entidad {@link Persona}.
+     */
+    private final PersonaRepository personaRepository;
+
+    /**
+     * Repositorio para realizar operaciones CRUD sobre la entidad {@link Contacto}.
+     */
+    private final ContactoRepository contactoRepository;
+
+    /**
+     * Repositorio para realizar operaciones CRUD sobre la entidad
+     * {@link UsuarioPersona}.
+     */
+    private final UsuarioPersonaRepository usuarioPersonaRepository;
+
+    /**
+     * Repositorio para realizar operaciones CRUD sobre la entidad
+     * {@link Municipio}.
+     */
+    private final MunicipioRepository municipioRepository;
+
+    /**
+     * Repositorio para realizar operaciones CRUD sobre la entidad
+     * {@link Direccion}.
+     */
+    private final DireccionRepository direccionRepository;
+
+    /**
+     * Repositorio para realizar operaciones CRUD sobre la entidad {@link Cuenta}.
+     */
+    private final CuentaRepository cuentaRepository;
+
+    /**
+     * Repositorio para realizar operaciones CRUD sobre la entidad {@link Cliente}.
+     */
+    private final ClienteRepository clienteRepository;
+
+    /**
+     * Repositorio para realizar operaciones CRUD sobre la entidad
+     * {@link InversionAutomatica}.
+     */
+    private final InversionAutomaticaRepository inversionAutomaticaRepository;
+
+    /**
+     * Repositorio para realizar operaciones CRUD sobre la entidad {@link Credito}.
+     */
+    private final CreditoRepository creditoRepository;
+
+    /**
+     * Mensaje cuando el username ya existe.
+     */
+    private static final String USERNAME_YA_EXISTE;
+
+    /**
+     * Mensaje cuando el CURP ya existe.
+     */
+    private static final String CURP_YA_EXISTE;
+
+    /**
+     * Mensaje cuando no hay coincidencias con el tipo de contacto.
+     */
+    private static final String SIN_COINCIDENCIAS_CON_EL_TIPO_DE_CONTACTO;
+
+    /**
+     * Expresión para correo electrónico.
+     */
+    private static final String CORREO;
+
+    /**
+     * Expresión para URLs.
+     */
+    private static final String URL;
+
+    /**
+     * Expresión para teléfono.
+     */
+    private static final String TELEFONO;
+
+    static {
+        USERNAME_YA_EXISTE = "El username ya existe.";
+        CURP_YA_EXISTE = "El CURP ya existe.";
+        SIN_COINCIDENCIAS_CON_EL_TIPO_DE_CONTACTO = "Sin coincidencias con el tipo de contacto.";
+        CORREO = "(?!\\s)([A-Za-zñÑáéíóúÁÉÍÓÚüÜ0-9]+([.-][A-Za-zñÑáéíóúÁÉÍÓÚüÜ0-9_]+)*@[A-Za-zñÑáéíóúÁÉÍÓÚüÜ0-9]+([.][A-Za-zñÑáéíóúÁÉÍÓÚüÜ0-9_]+)*[.][A-Za-zñÑáéíóúÁÉÍÓÚüÜ]{2,3})";
+        URL = "(?=.{15,45}$)https?:\\/\\/[A-Za-zñÑáéíóúÁÉÍÓÚüÜ0-9]+[...]";
+        TELEFONO = "\\d{10}";
+    }
+
+    /**
+     * Límite crediticio por defecto.
+     */
+    private static final int LIMITE_CREDITICIO = 350_00;
+
+    /**
+     * Constructor de la clase {@code Cliente002BZ} que inicializa sus dependencias
+     * a partir de un objeto {@code Cliente002BzDTO}.
+     *
+     * @param dto Objeto de transferencia de datos que contiene las dependencias
+     *            necesarias para inicializar la instancia de {@code Cliente002BZ}.
+     */
+    public Cliente002BZ(final Cliente002BzDTO dto) {
+        this.usuarioRepository = dto.getUsuarioRepository();
+        this.personaFisicaRepository = dto.getPersonaFisicaRepository();
+        this.catalogoRepository = dto.getCatalogoRepository();
+        this.tipoContacto = dto.getTipoContacto();
+        this.activo = dto.getActivo();
+        this.pendiente = dto.getPendiente();
+        this.riesgoC7 = dto.getRiesgoC7();
+        this.tipoFisica = dto.getTipoFisica();
+        this.perfilCliente = dto.getPerfilCliente();
+        this.personaRepository = dto.getPersonaRepository();
+        this.contactoRepository = dto.getContactoRepository();
+        this.usuarioPersonaRepository = dto.getUsuarioPersonaRepository();
+        this.municipioRepository = dto.getMunicipioRepository();
+        this.direccionRepository = dto.getDireccionRepository();
+        this.cuentaRepository = dto.getCuentaRepository();
+        this.clienteRepository = dto.getClienteRepository();
+        this.inversionAutomaticaRepository = dto.getInversionAutomaticaRepository();
+        this.creditoRepository = dto.getCreditoRepository();
+    }
+
+    /**
+     * Crea un nuevo cliente en el sistema, coordinando la creación y persistencia
+     * de varias entidades.
+     * <p>
+     * El proceso de creación incluye las siguientes operaciones:
+     * <ul>
+     * <li>Validación de que el nombre de usuario y CURP no existan
+     * previamente.</li>
+     * <li>Creación del objeto {@link Usuario} con encriptación de contraseña.</li>
+     * <li>Registro de la {@link Persona} y sus {@link Contacto}s asociados.</li>
+     * <li>Establecimiento de la relación entre {@link Usuario} y {@link Persona} a
+     * través de {@link UsuarioPersona}.</li>
+     * <li>Persistencia de la {@link Direccion} del cliente.</li>
+     * <li>Registro de la {@link PersonaFisica} con sus datos personales.</li>
+     * <li>Creación y asociación de la {@link Cuenta} del cliente.</li>
+     * <li>Registro del {@link Cliente} en el sistema.</li>
+     * <li>Inicialización de la {@link InversionAutomatica} para la cuenta.</li>
+     * <li>Creación del {@link Credito} con un límite predeterminado y nivel de
+     * riesgo asignado.</li>
+     * </ul>
+     * Cada paso realiza las validaciones necesarias y utiliza los repositorios para
+     * la persistencia de la información.
+     * </p>
+     *
+     * @param rqsv014 objeto de solicitud que encapsula todos los datos necesarios
+     *                para la creación del cliente.
+     * @return un {@link ResponseEntity} con el objeto {@link RSB028} que contiene
+     *         el resultado de la operación, o un error si alguna
+     */
+    public ResponseEntity<RSB028> crear(final RQSV014 rqsv014) {
 
         RSB028 rsb028 = rqsv014.getRsb028();
         Sesion sesion = rqsv014.getSesion();
         LocalDateTime now = LocalDateTime.now();
         String idUsr = rqsv014.getUsuario();
+
         if (usuarioRepository.findByNameRegardlessOfStatus(idUsr).isPresent()) {
             return rsb028.badRequest(USERNAME_YA_EXISTE);
         }
@@ -142,10 +276,32 @@ public abstract class Cliente002BZ {
 
         return rsb028.ok(cliente);
     }
-	
 
-    private List<Contacto> procesarContactos(
-        final List<RQSV024> listaContactos) {
+    /**
+     * Procesa y valida la lista de contactos proporcionada.
+     * <p>
+     * Para cada contacto se realiza lo siguiente:
+     * <ul>
+     * <li>Se obtiene el catálogo del tipo de contacto.</li>
+     * <li>Se valida que el tipo exista, sea válido y se encuentre entre los tipos
+     * permitidos.</li>
+     * <li>Se comprueba que el estatus del tipo sea "activo".</li>
+     * <li>Se valida el formato del valor del contacto según su tipo:
+     * <ul>
+     * <li>"E-MAIL" se valida con el formato de correo.</li>
+     * <li>"SITIO-WEB" se valida con el formato de URL.</li>
+     * <li>Si el tipo contiene "TEL", se valida con el formato de teléfono.</li>
+     * </ul>
+     * </li>
+     * </ul>
+     * Si alguna validación falla, se retorna {@code null}.
+     * </p>
+     *
+     * @param listaContactos Lista de contactos provenientes de la solicitud.
+     * @return Lista de contactos válidos o {@code null} si se detecta un contacto
+     *         no válido.
+     */
+    private List<Contacto> procesarContactos(final List<RQSV024> listaContactos) {
 
         if (listaContactos == null || listaContactos.isEmpty()) {
             return new ArrayList<>();
@@ -184,10 +340,17 @@ public abstract class Cliente002BZ {
         }
         return contactosValidos;
     }
-    
 
-    private Usuario crearUsuario(final RQSV014 rqsv014,
-            final Sesion sesion, final LocalDateTime now) {
+    /**
+     * Crea y persiste un objeto {@link Usuario} a partir de los datos
+     * proporcionados en la solicitud.
+     *
+     * @param rqsv014 objeto de solicitud con los datos del usuario.
+     * @param sesion  sesión actual del usuario que realiza la operación.
+     * @param now     fecha y hora actual.
+     * @return el objeto {@link Usuario} creado y persistido.
+     */
+    private Usuario crearUsuario(final RQSV014 rqsv014, final Sesion sesion, final LocalDateTime now) {
 
         Usuario usuario = new Usuario();
         usuario.setNombre(rqsv014.getUsuario());
@@ -202,7 +365,6 @@ public abstract class Cliente002BZ {
         usuarioRepository.save(usuario);
         return usuario;
     }
-    
 
     private Persona crearPersona(final Sesion sesion, final LocalDateTime now) {
 
@@ -215,20 +377,16 @@ public abstract class Cliente002BZ {
         personaRepository.save(persona);
         return persona;
     }
-    
 
-    private void asignarContactosAPersona(final List<Contacto> contactos,
-            final Persona persona) {
+    private void asignarContactosAPersona(final List<Contacto> contactos, final Persona persona) {
 
         contactos.forEach(contacto -> {
             contacto.setPersona(persona);
             contactoRepository.save(contacto);
         });
     }
-    
 
-    private void crearUsuarioPersona(final Usuario usuario,
-            final Persona persona, final Sesion sesion,
+    private void crearUsuarioPersona(final Usuario usuario, final Persona persona, final Sesion sesion,
             final LocalDateTime now) {
 
         UsuarioPersona usuarioPersona = new UsuarioPersona();
@@ -240,10 +398,8 @@ public abstract class Cliente002BZ {
         usuarioPersona.setClave(UUID.randomUUID());
         usuarioPersonaRepository.save(usuarioPersona);
     }
-    
 
-    private Direccion crearDireccion(final RQSV014 rqsv014, final Sesion sesion,
-            final LocalDateTime now) {
+    private Direccion crearDireccion(final RQSV014 rqsv014, final Sesion sesion, final LocalDateTime now) {
 
         Direccion direccion = new Direccion();
         direccion.setCalle(rqsv014.getCalle());
@@ -265,10 +421,8 @@ public abstract class Cliente002BZ {
         direccion.setClave(UUID.randomUUID());
         return direccionRepository.save(direccion);
     }
-    
 
-    private PersonaFisica crearPersonaFisica(final RQSV014 rqsv014,
-            final Persona persona, final Direccion direccion,
+    private PersonaFisica crearPersonaFisica(final RQSV014 rqsv014, final Persona persona, final Direccion direccion,
             final Sesion sesion) {
 
         LocalDateTime now = LocalDateTime.now();
@@ -293,10 +447,8 @@ public abstract class Cliente002BZ {
         personaFisica.setClave(UUID.randomUUID());
         return personaFisicaRepository.save(personaFisica);
     }
-    
 
-    private Cuenta crearCuenta(final Usuario usuario, final Sesion sesion,
-            final LocalDateTime now) {
+    private Cuenta crearCuenta(final Usuario usuario, final Sesion sesion, final LocalDateTime now) {
 
         Cuenta cuenta = new Cuenta();
         cuenta.setUsuario(usuario);
@@ -306,10 +458,9 @@ public abstract class Cliente002BZ {
         cuenta.setClave(UUID.randomUUID());
         return cuentaRepository.save(cuenta);
     }
-    
 
-    private Cliente crearCliente(final PersonaFisica personaFisica,
-            final Cuenta cuenta, final Sesion sesion, final LocalDateTime now) {
+    private Cliente crearCliente(final PersonaFisica personaFisica, final Cuenta cuenta, final Sesion sesion,
+            final LocalDateTime now) {
 
         Cliente cliente = new Cliente();
         cliente.setPersonaFisica(personaFisica);
@@ -320,10 +471,8 @@ public abstract class Cliente002BZ {
         cliente.setClave(UUID.randomUUID());
         return clienteRepository.save(cliente);
     }
-    
 
-    private void crearInversionAutomatica(final Cuenta cuenta,
-            final Sesion sesion, final LocalDateTime now) {
+    private void crearInversionAutomatica(final Cuenta cuenta, final Sesion sesion, final LocalDateTime now) {
 
         InversionAutomatica inversionAutomatica = new InversionAutomatica();
         inversionAutomatica.setCuenta(cuenta);
@@ -333,10 +482,8 @@ public abstract class Cliente002BZ {
         inversionAutomatica.setClave(UUID.randomUUID());
         inversionAutomaticaRepository.save(inversionAutomatica);
     }
-    
 
-    private void crearCredito(final Usuario usuario, final Sesion sesion,
-            final LocalDateTime now) {
+    private void crearCredito(final Usuario usuario, final Sesion sesion, final LocalDateTime now) {
 
         Credito credito = new Credito();
         credito.setUsuario(usuario);
@@ -350,9 +497,17 @@ public abstract class Cliente002BZ {
         credito.setClave(UUID.randomUUID());
         creditoRepository.save(credito);
     }
+
     private boolean isNotValid(final String regex, final String valor) {
         return !Pattern.matches(regex, valor);
     }
-    
+
+    /**
+     * Codifica el texto proporcionado utilizando una estrategia definida por la
+     * implementación concreta de esta clase.
+     *
+     * @param texto El texto que se desea codificar.
+     * @return Una cadena que representa el texto codificado.
+     */
     public abstract String encoder(String texto);
 }
